@@ -1,6 +1,16 @@
 @font-face {
     font-family: 'Alial';
-    src: url('');
+    src: url('/fonts/AlialSerif-Regular.ttf') format('truetype'); /* relative path to static folder */
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Alialnum';
+    src: url('/fonts/AlialSerif_Fallback-Regular.ttf') format('truetype'); /* relative path to static folder */
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
 @import 'tailwindcss';
@@ -18,7 +28,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Alial, sans-serif
+    font-family: Alial, Alialnum;
 }
 body{
     @apply dark:bg-[var(--global-color-2)] bg-[var(--global-color-1)];
@@ -32,7 +42,7 @@ body{
     @apply dark:text-[var(--global-color-1)] dark:bg-[var(--global-color-2-o)] text-[var(--global-color-3)] bg-[var(--global-color-1-o)];
     justify-content: space-between;
     padding: 1rem;
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
 }
 #Anzeige{
@@ -44,7 +54,7 @@ body{
     width: 100%;
     justify-content: space-evenly;
     padding: 1rem;
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
 }
 .BannerElement{
@@ -89,16 +99,19 @@ body{
     width: 100%;
     display: flex;
     justify-content: space-between;
-    font-size: 1.25rem;
+    font-size: 2.25rem;
     font-weight: bold;
     margin-bottom: 1rem;
 }
 .Input{
+    font-size: 1.5rem;
+    font-weight: bold;
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
 .AzubiText{
+    font-size: 2rem;
     justify-content: center;
     padding-top: 1rem;
     width: 80%;
