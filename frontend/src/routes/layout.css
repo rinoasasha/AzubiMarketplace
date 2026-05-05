@@ -1,0 +1,105 @@
+@font-face {
+    font-family: 'Alial';
+    src: url('');
+}
+
+@import 'tailwindcss';
+@variant dark (&:where(.dark, .dark *));
+
+:root{
+--global-color-1: #FFFFFF; /* bg-color in light mode and text color in dark mode*/
+--global-color-2: #181818; /* bg-color in dark mode and text color in light mode*/
+--global-color-1-o: #ffffffe3; /* bg-color in light mode and text color in dark mode with lowered opacity*/
+--global-color-2-o: #181818e3; /* bg-color in dark mode and text color in light mode with lowered opacity*/
+--global-color-3: #FF00FF; /* main accent color and text color for TopBar*/
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Alial, sans-serif
+}
+body{
+    @apply dark:bg-[var(--global-color-2)] bg-[var(--global-color-1)];
+}
+#TopBar{
+    display:flex;
+    flex-direction:row;
+    top: 0rem;
+    width: 100%;
+    position: fixed;
+    @apply dark:text-[var(--global-color-1)] dark:bg-[var(--global-color-2-o)] text-[var(--global-color-3)] bg-[var(--global-color-1-o)];
+    justify-content: space-between;
+    padding: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+#Anzeige{
+}
+#Banner{
+    display:flex;
+    flex-direction:row;
+    margin-top: 4rem;
+    width: 100%;
+    justify-content: space-evenly;
+    padding: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.BannerElement{
+    border-radius: 15px;
+    @apply dark:border-[var(--global-color-1)] border-[var(--global-color-2)];
+    @apply dark:text-[var(--global-color-1)] text-[var(--global-color-2)];
+    padding: 1rem;
+    @apply dark:bg-linear-to-tl dark:from-[var(--global-color-2)] dark:to-[var(--global-color-3)] bg-linear-to-bl from-[var(--global-color-3)] to-[var(--global-color-1)];
+    @apply dark:shadow-[5px_5px_3px_rgba(255,255,255,0.5)] shadow-[-5px_5px_3px_rgba(0,0,0,0.25)];
+}
+#Logo{
+    display: flex;
+    justify-content: left;
+}
+#In{
+    border-radius: 10px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    @apply dark:bg-[var(--global-color-1)] bg-[var(--global-color-3)];
+    @apply dark:text-[var(--global-color-3)] text-[var(--global-color-1)];
+}
+#AzubiBlock{
+    display: flex;
+    justify-content: center;
+}
+#AzubiBlock > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 7rem;
+    margin-right: 7rem;
+    margin-top: 2rem;
+    width: 80vw;
+    border-radius: 15px;
+    @apply dark:border-[var(--global-color-1)] border-[var(--global-color-2)];
+    @apply dark:text-[var(--global-color-1)] text-[var(--global-color-2)];
+    padding: 1rem;
+    @apply dark:bg-linear-to-tl dark:from-[var(--global-color-2)] dark:to-[var(--global-color-3)] bg-linear-to-bl from-[var(--global-color-3)] to-[var(--global-color-1)];
+    @apply dark:shadow-[5px_5px_3px_rgba(255,255,255,0.5)] shadow-[-5px_5px_3px_rgba(0,0,0,0.25)];
+}
+.AzubiName{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+.Input{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.AzubiText{
+    justify-content: center;
+    padding-top: 1rem;
+    width: 80%;
+}
