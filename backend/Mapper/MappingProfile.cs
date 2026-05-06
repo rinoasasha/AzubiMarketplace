@@ -11,5 +11,6 @@ public class MappingProfile : Profile
     {
         CreateMap<User, UserDTO>();
         CreateMap<AzubiRequest, AzubiRequestDTO>();
+        CreateMap<ABBApplication, ABBApplicationDTO>();
     }
 }

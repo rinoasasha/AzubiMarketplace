@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace backend.Controllers;
 
@@ -12,11 +14,13 @@ namespace backend.Controllers;
 public class RequestController : ControllerBase
 {
     private readonly DataContext _context;
+    private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
     
-    public RequestController(DataContext context, IMapper mapper)
+    public RequestController(DataContext context, UserManager<User> userManager, IMapper mapper)
     {
         _context = context;
+        _userManager = userManager;
         _mapper = mapper;
     }
     
@@ -39,10 +43,20 @@ public class RequestController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Post([FromBody] AzubiRequestCreateDTO _request)
     {
-        var userController = new UserController(_context, _mapper);
+        var author = await _userManager.GetUserAsync(HttpContext.User);
+        if (author == null)
+        {
+            return BadRequest();
+        }
 
+        if (!_userManager.IsInRoleAsync(author, "Azubi").GetAwaiter().GetResult())
+        {
+            return Unauthorized();
+        }
+        
         var request = new AzubiRequest()
         {
+            Author = author,
             TextContent = _request.TextContent
         };
         await _context.AzubiRequests.AddAsync(request);
