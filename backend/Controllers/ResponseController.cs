@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 public class ResponseController : ControllerBase
 {
     private readonly DataContext _context;
@@ -28,7 +28,7 @@ public class ResponseController : ControllerBase
     // get all responses for request
     
     // post new response
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Post([FromBody]ABBApplicationCreateDTO _request)
     {
         var author = await _userManager.GetUserAsync(HttpContext.User);
