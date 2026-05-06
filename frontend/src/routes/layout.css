@@ -46,6 +46,8 @@ body{
     font-weight: bold;
 }
 #Anzeige{
+    position: fixed;
+    left: 45%;
 }
 #Banner{
     display:flex;
