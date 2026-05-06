@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
 
-public class LoginController : Controller
+public class ResponseController : Controller
 {
     // GET
     public IActionResult Index()
