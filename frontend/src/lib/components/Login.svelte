@@ -1,11 +1,13 @@
 <script lang='ts'>
+	import { onMount } from "svelte";
+
 const headerState = $state({
     currentUserId: null as string | null,
     isLoggedIn: false,
     currentDisplayName: ''
 });
 
-const API_BASE = (import.meta.env.PUBLIC_API_BASE_URL ?? 'http://localhost:5172').replace(/\/$/, '');
+const API_BASE = (import.meta.env.PUBLIC_API_BASE_URL ?? 'http://localhost:5000').replace(/\/$/, '');
 
 async function toggleLogin() {
     if (headerState.isLoggedIn) {
@@ -27,8 +29,11 @@ async function loadCurrentUser() {
     if (!response.ok) {
         throw new Error('Failed to load current user.');
     }
+    const data = await response.json()
+    headerState.currentUserId = data.user
+    headerState.isLoggedIn = true;
 };
-
+onMount(() => {loadCurrentUser()});
 export {headerState, toggleLogin};
 </script>
 
