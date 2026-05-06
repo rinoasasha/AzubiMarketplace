@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/[controller]")]
 public class UserController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
@@ -28,7 +28,7 @@ public class UserController : ControllerBase
     }
     
     // get all users
-    [HttpGet]
+    [HttpGet("getall")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDTO>))]
     public async Task<IActionResult> Get()
     {
@@ -53,7 +53,7 @@ public class UserController : ControllerBase
     // get user by userId
     
     // get role azubi
-    [HttpPatch("/azubi")]
+    [HttpPatch("azubi")]
     public async Task<IActionResult> MakeAzubi()
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -66,7 +66,7 @@ public class UserController : ControllerBase
     }
     
     // get role abb
-    [HttpPatch("/abb")]
+    [HttpPatch("abb")]
     public async Task<IActionResult> MakeABB()
     {
         var user = await _userManager.GetUserAsync(HttpContext.User);

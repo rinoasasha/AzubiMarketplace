@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 namespace backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/[controller]")]
 public class RequestController : ControllerBase
 {
     private readonly DataContext _context;
@@ -25,7 +25,7 @@ public class RequestController : ControllerBase
     }
     
     // get all requests
-    [HttpGet]
+    [HttpGet("all")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Get()
     {
@@ -39,7 +39,7 @@ public class RequestController : ControllerBase
     // get requests for user
     
     // post new application
-    [HttpPost]
+    [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Post([FromBody] AzubiRequestCreateDTO _request)
     {
