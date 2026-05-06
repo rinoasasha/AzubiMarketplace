@@ -20,11 +20,21 @@ async function toggleLogin() {
 
 async function loadCurrentUser() {
     const response = await fetch(`${API_BASE}/api/v1/auth/@me`, { credentials: 'include' });
+    console.log(response)
     if (response.status === 401 || response.status === 404) {
         headerState.currentUserId = null;
         headerState.currentDisplayName = '';
         headerState.isLoggedIn = false;
         return;
+    }
+    if (response.ok) {
+        const data=await response.json();
+        if(!data.localUsername || !data.firstName) {
+            return;
+        }
+        headerState.currentUserId = data.localUsername;
+        headerState.isLoggedIn = true;
+        headerState.currentDisplayName = data.firstName;
     }
     if (!response.ok) {
         throw new Error('Failed to load current user.');
@@ -33,7 +43,11 @@ async function loadCurrentUser() {
     headerState.currentUserId = data.user
     headerState.isLoggedIn = true;
 };
-onMount(() => {loadCurrentUser()});
+
+onMount(() => {
+    loadCurrentUser()
+})
+
 export {headerState, toggleLogin};
 </script>
 
