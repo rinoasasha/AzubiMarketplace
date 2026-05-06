@@ -56,7 +56,7 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
 var ib = builder.Services.AddIdentityCore<User>(opt =>
 {
     opt.SignIn.RequireConfirmedAccount = false;
-    opt.User.RequireUniqueEmail = true;
+    opt.User.RequireUniqueEmail = false;
     opt.User.AllowedUserNameCharacters =
         "@abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.";
     opt.Password.RequireDigit = false;
@@ -77,7 +77,7 @@ builder.Services.AddScoped<IUserStore<User>, UserStore<User, UserRole, DataConte
 
 builder.Services.AddCors(o => o.AddPolicy("Frontend", b =>
 {
-    b.WithOrigins(["http://127.0.0.1:3000", "http://localhost:3000"])
+    b.WithOrigins(["http://127.0.0.1:3000", "http://localhost:3000", "http://127.0.0.1:5173", "http://localhost:5173/"])
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
@@ -115,5 +115,4 @@ app.UseAuthentication();
 
 app.MapControllers();
 
-
-app.Run("http://localhost:5051");
+app.Run("http://localhost:5000");

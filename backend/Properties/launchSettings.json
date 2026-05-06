@@ -7,7 +7,9 @@
       "launchBrowser": false,
       "applicationUrl": "http://localhost:5254",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "http_proxy": "http://127.0.0.1:3128",
+        "https_proxy": "http://127.0.0.1:3128"
       }
     },
     "https": {

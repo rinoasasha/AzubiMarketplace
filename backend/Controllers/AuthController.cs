@@ -7,7 +7,7 @@ using Microsoft.Identity.Web;
 using backend.Models;
 using backend.Models.DTOs;
 
-namespace Turniermanager.Controllers;
+namespace backend.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -133,6 +133,7 @@ public class AuthController : ControllerBase
             UserName = claims.SingleOrDefault(x => x.Type == ClaimConstants.PreferredUserName)?.Value,
             FirstName = firstNameClaim,
             LastName = lastNameClaim,
+            LocalUsername = Guid.NewGuid().ToString()
         };
 
         var userCreateResult = await _userManager.CreateAsync(user);
