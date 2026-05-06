@@ -19,6 +19,15 @@ builder.Services.AddSingleton(config);
 
 builder.Services.AddDbContext<DataContext>(opt => opt.UseMySql(config.Database.ConnectionString, MySqlServerVersion.LatestSupportedServerVersion));
 
+
+builder.Services.AddCors(o => o.AddPolicy("Frontend", b =>
+{
+    b.WithOrigins("http://127.0.0.1:3000", "http://localhost:3000", "http://127.0.0.1:5173", "http://localhost:5173")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+}));
+
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
     .AddCookie(IdentityConstants.ApplicationScheme, opt =>
     {
@@ -32,6 +41,7 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
         opt.Events.OnRedirectToLogin = context =>
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            context.Response.Body.WriteAsync(System.Text.Encoding.UTF8.GetBytes("Not logged in"));
             return Task.CompletedTask;
         };
         opt.Events.OnRedirectToAccessDenied = context =>
@@ -77,7 +87,7 @@ builder.Services.AddScoped<IUserStore<User>, UserStore<User, UserRole, DataConte
 
 builder.Services.AddCors(o => o.AddPolicy("Frontend", b =>
 {
-    b.WithOrigins(["http://127.0.0.1:3000", "http://localhost:3000"])
+    b.WithOrigins(["http://127.0.0.1:3000", "http://localhost:3000", "http://127.0.0.1:5173", "http://localhost:5173/"])
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
@@ -108,10 +118,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("Frontend");
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

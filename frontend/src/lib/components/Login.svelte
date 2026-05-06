@@ -1,11 +1,15 @@
 <script lang='ts'>
+	import { onMount } from "svelte";
+
+
+
 const headerState = $state({
     currentUserId: null as string | null,
     isLoggedIn: false,
     currentDisplayName: ''
 });
 
-const API_BASE = (import.meta.env.PUBLIC_API_BASE_URL ?? 'http://localhost:5172').replace(/\/$/, '');
+const API_BASE = (import.meta.env.PUBLIC_API_BASE_URL ?? 'http://localhost:5000').replace(/\/$/, '');
 
 async function toggleLogin() {
     if (headerState.isLoggedIn) {
@@ -18,16 +22,30 @@ async function toggleLogin() {
 
 async function loadCurrentUser() {
     const response = await fetch(`${API_BASE}/api/v1/auth/@me`, { credentials: 'include' });
+    console.log(response)
     if (response.status === 401 || response.status === 404) {
         headerState.currentUserId = null;
         headerState.currentDisplayName = '';
         headerState.isLoggedIn = false;
         return;
     }
+    if (response.ok) {
+        const data=await response.json();
+        if(!data.localUsername || !data.firstName) {
+            return;
+        }
+        headerState.currentUserId = data.localUsername;
+        headerState.isLoggedIn = true;
+        headerState.currentDisplayName = data.firstName;
+    }
     if (!response.ok) {
         throw new Error('Failed to load current user.');
     }
 };
+
+onMount(() => {
+    loadCurrentUser()
+})
 
 export {headerState, toggleLogin};
 </script>

@@ -34,7 +34,7 @@ public class AuthController : ControllerBase
     {
         var user = await _userManager.GetUserAsync(User);
 
-        if (user == null) return Unauthorized();
+        if (user == null) return Unauthorized("Cannot find user");
 
         return Ok(_mapper.Map<UserDTO>(user));
     }
