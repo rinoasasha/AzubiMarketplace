@@ -40,14 +40,9 @@ public class RequestController : ControllerBase
     public async Task<IActionResult> Post([FromBody] AzubiRequestCreateDTO _request)
     {
         var userController = new UserController(_context, _mapper);
-        var userResult = "keine Ahnung";
-        if (userResult == null)
-        {
-            return NotFound();
-        }
+
         var request = new AzubiRequest()
         {
-            // Author =  userResult,
             TextContent = _request.TextContent
         };
         await _context.AzubiRequests.AddAsync(request);

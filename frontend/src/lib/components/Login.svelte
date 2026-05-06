@@ -1,8 +1,6 @@
 <script lang='ts'>
 	import { onMount } from "svelte";
 
-
-
 const headerState = $state({
     currentUserId: null as string | null,
     isLoggedIn: false,
@@ -41,6 +39,9 @@ async function loadCurrentUser() {
     if (!response.ok) {
         throw new Error('Failed to load current user.');
     }
+    const data = await response.json()
+    headerState.currentUserId = data.user
+    headerState.isLoggedIn = true;
 };
 
 onMount(() => {

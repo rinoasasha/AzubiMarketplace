@@ -8,5 +8,5 @@ public class AzubiRequestDTO
     public UserDTO Author { get; set; }
     public DateTime CreationDateTime { get; set; }
     public string TextContent { get; set; }
-    public List<Guid> ResponsesIds { get; set; }
+    public List<ABBApplicationDTO> Responses { get; set; }
 }
