@@ -86,7 +86,7 @@ builder.Services.AddScoped<IRoleStore<UserRole>, RoleStore<UserRole, DataContext
 builder.Services.AddScoped<IUserStore<User>, UserStore<User, UserRole, DataContext, Guid>>();
 
 builder.Services.AddCors(o => o.AddPolicy("Frontend", b =>
-{
+
     b.WithOrigins("http://127.0.0.1:3000", "http://localhost:3000", "http://127.0.0.1:5173", "http://localhost:5173")
         .AllowAnyMethod()
         .AllowAnyHeader()

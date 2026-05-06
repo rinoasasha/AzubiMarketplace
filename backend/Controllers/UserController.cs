@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Models.Enums;
@@ -12,11 +14,15 @@ namespace backend.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
+    private readonly UserManager<User> _userManager;
+    private readonly RoleManager<UserRole> _roleManager;
     private readonly DataContext _context;
     private readonly IMapper _mapper;
     
-    public UserController(DataContext context, IMapper mapper)
+    public UserController(DataContext context, IMapper mapper, UserManager<User> userManager, RoleManager<UserRole> roleManager)
     {
+        _userManager = userManager;
+        _roleManager = roleManager;
         _context = context;
         _mapper = mapper;
     }
@@ -26,7 +32,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDTO>))]
     public async Task<IActionResult> Get()
     {
-        var users = await _context.Users.ToListAsync();
+        var users = await _userManager.Users.ToListAsync();
         return Ok(_mapper.Map<List<UserDTO>>(users));
     }
     
@@ -45,36 +51,30 @@ public class UserController : ControllerBase
     }
     
     // get user by userId
-
-    // add user
-    [HttpPost("{_accountType}")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserDTO))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] UserCreateDTO userdto, [FromRoute]string _accountType)
+    
+    // get role azubi
+    [HttpPatch("/azubi")]
+    public async Task<IActionResult> MakeAzubi()
     {
-        AccountType accountType;
-        switch (_accountType)
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        if (user == null)
         {
-            case "Azubi":
-                accountType = AccountType.Azubi;
-                break;
-            case "ABB":
-                accountType = AccountType.ABB;
-                break;
-            default:
-                return BadRequest("Invalid account type");
+            return NotFound();
         }
-        
-        var user = new User()
-        {
-            LocalUsername = userdto.Username,
-            Email = userdto.Email,
-        };
-        
-        await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
-        return Created("", _mapper.Map<UserDTO>(user));
+        var success = await _userManager.AddToRoleAsync(user, "Azubi");
+        return Ok(success);
     }
     
-    // login
+    // get role abb
+    [HttpPatch("/abb")]
+    public async Task<IActionResult> MakeABB()
+    {
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        var success = await _userManager.AddToRoleAsync(user, "ABB");
+        return Ok(success);
+    }
 }
