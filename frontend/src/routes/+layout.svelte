@@ -3,8 +3,9 @@
     import Login from '$lib/components/Login.svelte';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+    import type { LayoutProps } from './$types';
 
-	let { children } = $props();
+	let { children, data } = $props();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -16,6 +17,7 @@
     </div>
     <div id="TopButtons" class="flex justify-center content-center items-center gap-x-2">
         <ThemeSwitch/>
-        <Login/>
+        <!-- <Login/> -->
     </div>
+    <div>{data.login.valueOf()}</div>
 </div>

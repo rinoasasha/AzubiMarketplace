@@ -13,7 +13,7 @@
     font-display: swap;
 }
 
-@import 'tailwindcss';
+@import "tailwindcss";
 @variant dark (&:where(.dark, .dark *));
 
 :root{

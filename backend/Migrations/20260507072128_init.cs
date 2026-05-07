@@ -209,7 +209,8 @@ namespace backend.Migrations
                     AuthorId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     TextContent = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    isActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -266,7 +267,8 @@ namespace backend.Migrations
                     CreationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     TextContent = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    RelatedRequestRequestId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                    RelatedRequestRequestId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    isActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,7 +294,7 @@ namespace backend.Migrations
                 {
                     ChangeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     SessionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    CHangedRequestRequestId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ChangedRequestRequestId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     InitiatingUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     ChangedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     PropertyName = table.Column<string>(type: "longtext", nullable: false)
@@ -312,8 +314,8 @@ namespace backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RequestChanges_AzubiRequests_CHangedRequestRequestId",
-                        column: x => x.CHangedRequestRequestId,
+                        name: "FK_RequestChanges_AzubiRequests_ChangedRequestRequestId",
+                        column: x => x.ChangedRequestRequestId,
                         principalTable: "AzubiRequests",
                         principalColumn: "RequestId",
                         onDelete: ReferentialAction.Cascade);
@@ -407,9 +409,9 @@ namespace backend.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RequestChanges_CHangedRequestRequestId",
+                name: "IX_RequestChanges_ChangedRequestRequestId",
                 table: "RequestChanges",
-                column: "CHangedRequestRequestId");
+                column: "ChangedRequestRequestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RequestChanges_InitiatingUserId",

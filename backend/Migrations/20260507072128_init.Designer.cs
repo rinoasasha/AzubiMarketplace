@@ -12,7 +12,7 @@ using backend;
 namespace backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260506134556_init")]
+    [Migration("20260507072128_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -147,6 +147,9 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("tinyint(1)");
+
                     b.HasKey("ApplicationId");
 
                     b.HasIndex("AuthorId");
@@ -172,6 +175,9 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("tinyint(1)");
+
                     b.HasKey("RequestId");
 
                     b.HasIndex("AuthorId");
@@ -185,11 +191,11 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CHangedRequestRequestId")
-                        .HasColumnType("char(36)");
-
                     b.Property<DateTime>("ChangedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ChangedRequestRequestId")
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("InitiatingUserId")
                         .HasColumnType("char(36)");
@@ -210,7 +216,7 @@ namespace backend.Migrations
 
                     b.HasKey("ChangeId");
 
-                    b.HasIndex("CHangedRequestRequestId");
+                    b.HasIndex("ChangedRequestRequestId");
 
                     b.HasIndex("InitiatingUserId");
 
@@ -498,9 +504,9 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.RequestChange", b =>
                 {
-                    b.HasOne("backend.Models.AzubiRequest", "CHangedRequest")
+                    b.HasOne("backend.Models.AzubiRequest", "ChangedRequest")
                         .WithMany()
-                        .HasForeignKey("CHangedRequestRequestId")
+                        .HasForeignKey("ChangedRequestRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -510,7 +516,7 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CHangedRequest");
+                    b.Navigation("ChangedRequest");
 
                     b.Navigation("InitiatingUser");
                 });
