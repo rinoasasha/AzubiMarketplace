@@ -7,5 +7,5 @@
 </nav>
 
 <div id="homeMsg">
-    Welcome to the Azubi Marktplatz where Azubis can be requested for department assignments
+    Welcome to the Azubi Marktplatz Anzeige Page where Azubis can list themselves
 </div>
