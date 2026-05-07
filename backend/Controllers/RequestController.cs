@@ -38,7 +38,7 @@ public class RequestController : ControllerBase
     
     // get requests for user
     
-    // post new application
+    // post new request
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Post([FromBody] AzubiRequestCreateDTO _request)
@@ -62,5 +62,38 @@ public class RequestController : ControllerBase
         await _context.AzubiRequests.AddAsync(request);
         await _context.SaveChangesAsync();
         return Created("", _mapper.Map<AzubiRequestDTO>(request));
+    }
+    
+    // edit request
+    
+    // delete request
+    [HttpDelete("delete")]
+    public async Task<IActionResult> Delete([FromBody]string requestId)
+    {
+        var request = await _context.AzubiRequests.FindAsync(requestId);
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+        if (request == null || user == null)
+        {
+            return NotFound();
+        }
+        if (user != request.Author && !isAdmin)
+        {
+            return Unauthorized();
+        }
+        var change = new RequestChange()
+        {
+            SessionId =  Guid.NewGuid(),
+            InitiatingUser = user,
+            ChangedRequest = request,
+            PropertyName = "isActive",
+            OldValue = request.isActive.ToString(),
+            NewValue = false.ToString()
+        };
+        request.isActive = false;
+        _context.AzubiRequests.Update(request);
+        await _context.RequestChanges.AddAsync(change);
+        await _context.SaveChangesAsync();
+        return Ok();
     }
 }

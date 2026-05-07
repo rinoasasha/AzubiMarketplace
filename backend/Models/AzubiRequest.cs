@@ -11,5 +11,6 @@ public class AzubiRequest
     public User Author { get; set; }
     public DateTime CreationDateTime { get; set; } = DateTime.Now;
     public string TextContent { get; set; }
-    public List<ABBApplication> Responses { get; set; } = [];
+    public List<ABBResponse> Responses { get; set; } = [];
+    public bool isActive { get; set; } = true;
 }

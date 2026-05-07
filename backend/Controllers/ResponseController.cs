@@ -29,7 +29,7 @@ public class ResponseController : ControllerBase
     
     // post new response
     [HttpPost("create")]
-    public async Task<IActionResult> Post([FromBody]ABBApplicationCreateDTO _request)
+    public async Task<IActionResult> Post([FromBody]ABBResponseCreateDTO _request)
     {
         var author = await _userManager.GetUserAsync(HttpContext.User);
         var relatedRequest = await _context.AzubiRequests.FirstOrDefaultAsync(x => x.RequestId == _request.RelatedRequestId);
@@ -43,13 +43,13 @@ public class ResponseController : ControllerBase
             return Unauthorized();
         }
 
-        var response = new ABBApplication()
+        var response = new ABBResponse()
         {
             Author =  author,
             RelatedRequest = relatedRequest,
             TextContent =  _request.TextContent
         };
-        await _context.ABBApplications.AddAsync(response);
+        await _context.AbbResponses.AddAsync(response);
         relatedRequest.Responses.Add(response);
         await _context.SaveChangesAsync();
         return Ok();

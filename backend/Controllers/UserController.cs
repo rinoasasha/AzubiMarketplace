@@ -52,6 +52,84 @@ public class UserController : ControllerBase
     
     // get user by userId
     
+    // edit own user profile
+    [HttpPatch("edit/self")]
+    public async Task<IActionResult> EditSelf([FromBody] UserEditDTO edits)
+    {
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        if (user == null)
+        {
+            return BadRequest();
+        }
+
+        var changes = new List<UserChange>();
+        var sessionId = Guid.NewGuid();
+        foreach (var property in edits.GetType().GetProperties())
+        {
+            Console.WriteLine(property);
+            var valueOld = user.GetType().GetProperty(property.Name).GetValue(user);
+            var valueNew = edits.GetType().GetProperty(property.Name).GetValue(edits);
+            if (valueOld != valueNew && valueNew != null)
+            {
+                var change = new UserChange()
+                {
+                    SessionId =  sessionId,
+                    ChangedUser =  user,
+                    InitiatingUser = user,
+                    PropertyName = property.Name,
+                    OldValue = valueOld.ToString(),
+                    NewValue = valueNew.ToString()
+                };
+                user.GetType().GetProperty(property.Name).SetValue(user, valueNew);
+                changes.Add(change);
+                _context.UserChanges.Add(change);
+            }
+        }
+        await _userManager.UpdateAsync(user);
+        await _context.SaveChangesAsync();
+        return Ok(changes);
+    }
+    
+    //edit user profile as admin
+    [Authorize(Roles = "Admin")]
+    [HttpPatch("edit/{userid}")]
+    public async Task<IActionResult> Edit([FromBody] UserEditDTO edits, [FromRoute] string userid)
+    {
+        var user = await _userManager.FindByIdAsync(userid);
+        var initiatingUser = await _userManager.GetUserAsync(HttpContext.User);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var changes = new List<UserChange>();
+        var sessionId = Guid.NewGuid();
+        foreach (var property in edits.GetType().GetProperties())
+        {
+            Console.WriteLine(property);
+            var valueOld = user.GetType().GetProperty(property.Name).GetValue(user);
+            var valueNew = edits.GetType().GetProperty(property.Name).GetValue(edits);
+            if (valueOld != valueNew && valueNew != null)
+            {
+                var change = new UserChange()
+                {
+                    SessionId =  sessionId,
+                    ChangedUser =  user,
+                    InitiatingUser = initiatingUser,
+                    PropertyName = property.Name,
+                    OldValue = valueOld.ToString(),
+                    NewValue = valueNew.ToString(),
+                };
+                user.GetType().GetProperty(property.Name).SetValue(user, valueNew);
+                changes.Add(change);
+                _context.UserChanges.Add(change);
+            }
+        }
+        await _userManager.UpdateAsync(user);
+        await _context.SaveChangesAsync();
+        return Ok(changes);
+    }
+    
     // get role azubi
     [HttpPatch("azubi")]
     public async Task<IActionResult> MakeAzubi()
@@ -59,10 +137,10 @@ public class UserController : ControllerBase
         var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user == null)
         {
-            return NotFound();
+            return BadRequest();
         }
-        var success = await _userManager.AddToRoleAsync(user, "Azubi");
-        return Ok(success);
+        await _userManager.AddToRoleAsync(user, "Azubi");
+        return Ok();
     }
     
     // get role abb
@@ -74,7 +152,7 @@ public class UserController : ControllerBase
         {
             return NotFound();
         }
-        var success = await _userManager.AddToRoleAsync(user, "ABB");
-        return Ok(success);
+        await _userManager.AddToRoleAsync(user, "ABB");
+        return Ok();
     }
 }
