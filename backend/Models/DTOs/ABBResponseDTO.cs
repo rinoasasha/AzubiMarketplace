@@ -1,6 +1,6 @@
 namespace backend.Models.DTOs;
 
-public class ABBApplicationDTO
+public class ABBResponseDTO
 {
     public UserDTO Author { get; set; }
     public DateTime CreationDateTime { get; set; } = DateTime.Now;

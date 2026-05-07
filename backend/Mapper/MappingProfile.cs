@@ -10,7 +10,8 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<User, UserDTO>();
+        CreateMap<User, UserEditDTO>();
         CreateMap<AzubiRequest, AzubiRequestDTO>();
-        CreateMap<ABBApplication, ABBApplicationDTO>();
+        CreateMap<ABBResponse, ABBResponseDTO>();
     }
 }

@@ -125,7 +125,7 @@ namespace backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("backend.Models.ABBApplication", b =>
+            modelBuilder.Entity("backend.Models.ABBResponse", b =>
                 {
                     b.Property<Guid>("ApplicationId")
                         .ValueGeneratedOnAdd()
@@ -150,62 +150,7 @@ namespace backend.Migrations
 
                     b.HasIndex("RelatedRequestRequestId");
 
-                    b.ToTable("ABBApplications");
-                });
-
-            modelBuilder.Entity("backend.Models.ABBProfile", b =>
-                {
-                    b.Property<string>("DepartmentAbbr")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("Standort")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("assocUserId")
-                        .HasColumnType("char(36)");
-
-                    b.HasIndex("assocUserId");
-
-                    b.ToTable("ABBProfiles");
-                });
-
-            modelBuilder.Entity("backend.Models.AzubiProfile", b =>
-                {
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("Standort")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TrainingOccupationAbbr")
-                        .IsRequired()
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<short>("TrainingStartYear")
-                        .HasColumnType("year");
-
-                    b.Property<Guid>("assocUserId")
-                        .HasColumnType("char(36)");
-
-                    b.HasIndex("TrainingOccupationAbbr");
-
-                    b.HasIndex("assocUserId");
-
-                    b.ToTable("AzubiProfiles");
+                    b.ToTable("AbbResponses");
                 });
 
             modelBuilder.Entity("backend.Models.AzubiRequest", b =>
@@ -231,22 +176,80 @@ namespace backend.Migrations
                     b.ToTable("AzubiRequests");
                 });
 
-            modelBuilder.Entity("backend.Models.TrainingOccupation", b =>
+            modelBuilder.Entity("backend.Models.RequestChange", b =>
                 {
-                    b.Property<string>("Abbr")
-                        .HasColumnType("varchar(15)");
+                    b.Property<Guid>("ChangeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("Name")
+                    b.Property<Guid>("CHangedRequestRequestId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("InitiatingUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("NewValue")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.PrimitiveCollection<string>("Skills")
+                    b.Property<string>("OldValue")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PropertyName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("Abbr");
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("char(36)");
 
-                    b.ToTable("TrainingOccupation");
+                    b.HasKey("ChangeId");
+
+                    b.HasIndex("CHangedRequestRequestId");
+
+                    b.HasIndex("InitiatingUserId");
+
+                    b.ToTable("RequestChanges");
+                });
+
+            modelBuilder.Entity("backend.Models.ResponseChange", b =>
+                {
+                    b.Property<Guid>("ChangeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ChangedResponseApplicationId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("InitiatingUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("NewValue")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OldValue")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PropertyName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("ChangeId");
+
+                    b.HasIndex("ChangedResponseApplicationId");
+
+                    b.HasIndex("InitiatingUserId");
+
+                    b.ToTable("ResponseChanges");
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>
@@ -344,6 +347,44 @@ namespace backend.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("backend.Models.UserChange", b =>
+                {
+                    b.Property<Guid>("ChangeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ChangedUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("InitiatingUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("NewValue")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OldValue")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PropertyName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("ChangeId");
+
+                    b.HasIndex("ChangedUserId");
+
+                    b.HasIndex("InitiatingUserId");
+
+                    b.ToTable("UserChanges");
+                });
+
             modelBuilder.Entity("backend.Models.UserRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -422,7 +463,7 @@ namespace backend.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("backend.Models.ABBApplication", b =>
+            modelBuilder.Entity("backend.Models.ABBResponse", b =>
                 {
                     b.HasOne("backend.Models.User", "Author")
                         .WithMany()
@@ -441,36 +482,6 @@ namespace backend.Migrations
                     b.Navigation("RelatedRequest");
                 });
 
-            modelBuilder.Entity("backend.Models.ABBProfile", b =>
-                {
-                    b.HasOne("backend.Models.User", "assocUser")
-                        .WithMany()
-                        .HasForeignKey("assocUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("assocUser");
-                });
-
-            modelBuilder.Entity("backend.Models.AzubiProfile", b =>
-                {
-                    b.HasOne("backend.Models.TrainingOccupation", "TrainingOccupation")
-                        .WithMany()
-                        .HasForeignKey("TrainingOccupationAbbr")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("backend.Models.User", "assocUser")
-                        .WithMany()
-                        .HasForeignKey("assocUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TrainingOccupation");
-
-                    b.Navigation("assocUser");
-                });
-
             modelBuilder.Entity("backend.Models.AzubiRequest", b =>
                 {
                     b.HasOne("backend.Models.User", "Author")
@@ -480,6 +491,63 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("backend.Models.RequestChange", b =>
+                {
+                    b.HasOne("backend.Models.AzubiRequest", "CHangedRequest")
+                        .WithMany()
+                        .HasForeignKey("CHangedRequestRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.User", "InitiatingUser")
+                        .WithMany()
+                        .HasForeignKey("InitiatingUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CHangedRequest");
+
+                    b.Navigation("InitiatingUser");
+                });
+
+            modelBuilder.Entity("backend.Models.ResponseChange", b =>
+                {
+                    b.HasOne("backend.Models.ABBResponse", "ChangedResponse")
+                        .WithMany()
+                        .HasForeignKey("ChangedResponseApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.User", "InitiatingUser")
+                        .WithMany()
+                        .HasForeignKey("InitiatingUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChangedResponse");
+
+                    b.Navigation("InitiatingUser");
+                });
+
+            modelBuilder.Entity("backend.Models.UserChange", b =>
+                {
+                    b.HasOne("backend.Models.User", "ChangedUser")
+                        .WithMany()
+                        .HasForeignKey("ChangedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.User", "InitiatingUser")
+                        .WithMany()
+                        .HasForeignKey("InitiatingUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChangedUser");
+
+                    b.Navigation("InitiatingUser");
                 });
 
             modelBuilder.Entity("backend.Models.AzubiRequest", b =>

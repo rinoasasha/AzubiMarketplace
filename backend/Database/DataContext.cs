@@ -7,11 +7,11 @@ namespace backend;
 
 public class DataContext : IdentityDbContext<User, UserRole, Guid>
 {
-    public DbSet<AzubiProfile> AzubiProfiles { get; set; }
-    public DbSet<ABBProfile> ABBProfiles { get; set; }
     public DbSet<AzubiRequest> AzubiRequests { get; set; }
-    public DbSet<ABBApplication> ABBApplications { get; set; }
-
+    public DbSet<ABBResponse> AbbResponses { get; set; }
+    public DbSet<UserChange> UserChanges { get; set; }
+    public DbSet<RequestChange> RequestChanges { get; set; }
+    public DbSet<ResponseChange> ResponseChanges { get; set; }
     public DataContext(DbContextOptions<DataContext> options)
         : base(options)
     {

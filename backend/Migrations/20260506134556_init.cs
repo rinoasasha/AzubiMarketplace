@@ -44,6 +44,13 @@ namespace backend.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Location = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Department = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TrainingOccupation = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TrainingStartYear = table.Column<short>(type: "year", nullable: true),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -74,23 +81,6 @@ namespace backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "TrainingOccupation",
-                columns: table => new
-                {
-                    Abbr = table.Column<string>(type: "varchar(15)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Skills = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TrainingOccupation", x => x.Abbr);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -109,30 +99,6 @@ namespace backend.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "ABBProfiles",
-                columns: table => new
-                {
-                    DepartmentAbbr = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    assocUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    FirstName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Standort = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.ForeignKey(
-                        name: "FK_ABBProfiles_AspNetUsers_assocUserId",
-                        column: x => x.assocUserId,
-                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -258,38 +224,41 @@ namespace backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "AzubiProfiles",
+                name: "UserChanges",
                 columns: table => new
                 {
-                    TrainingStartYear = table.Column<short>(type: "year", nullable: false),
-                    TrainingOccupationAbbr = table.Column<string>(type: "varchar(15)", nullable: false)
+                    ChangeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SessionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ChangedUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    InitiatingUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ChangedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    PropertyName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    assocUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    FirstName = table.Column<string>(type: "longtext", nullable: false)
+                    OldValue = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Standort = table.Column<int>(type: "int", nullable: false)
+                    NewValue = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_UserChanges", x => x.ChangeId);
                     table.ForeignKey(
-                        name: "FK_AzubiProfiles_AspNetUsers_assocUserId",
-                        column: x => x.assocUserId,
+                        name: "FK_UserChanges_AspNetUsers_ChangedUserId",
+                        column: x => x.ChangedUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AzubiProfiles_TrainingOccupation_TrainingOccupationAbbr",
-                        column: x => x.TrainingOccupationAbbr,
-                        principalTable: "TrainingOccupation",
-                        principalColumn: "Abbr",
+                        name: "FK_UserChanges_AspNetUsers_InitiatingUserId",
+                        column: x => x.InitiatingUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ABBApplications",
+                name: "AbbResponses",
                 columns: table => new
                 {
                     ApplicationId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -301,15 +270,15 @@ namespace backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ABBApplications", x => x.ApplicationId);
+                    table.PrimaryKey("PK_AbbResponses", x => x.ApplicationId);
                     table.ForeignKey(
-                        name: "FK_ABBApplications_AspNetUsers_AuthorId",
+                        name: "FK_AbbResponses_AspNetUsers_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ABBApplications_AzubiRequests_RelatedRequestRequestId",
+                        name: "FK_AbbResponses_AzubiRequests_RelatedRequestRequestId",
                         column: x => x.RelatedRequestRequestId,
                         principalTable: "AzubiRequests",
                         principalColumn: "RequestId",
@@ -317,20 +286,83 @@ namespace backend.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "RequestChanges",
+                columns: table => new
+                {
+                    ChangeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SessionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CHangedRequestRequestId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    InitiatingUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ChangedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    PropertyName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OldValue = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NewValue = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestChanges", x => x.ChangeId);
+                    table.ForeignKey(
+                        name: "FK_RequestChanges_AspNetUsers_InitiatingUserId",
+                        column: x => x.InitiatingUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RequestChanges_AzubiRequests_CHangedRequestRequestId",
+                        column: x => x.CHangedRequestRequestId,
+                        principalTable: "AzubiRequests",
+                        principalColumn: "RequestId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ResponseChanges",
+                columns: table => new
+                {
+                    ChangeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SessionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ChangedResponseApplicationId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    InitiatingUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ChangedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    PropertyName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OldValue = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NewValue = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResponseChanges", x => x.ChangeId);
+                    table.ForeignKey(
+                        name: "FK_ResponseChanges_AbbResponses_ChangedResponseApplicationId",
+                        column: x => x.ChangedResponseApplicationId,
+                        principalTable: "AbbResponses",
+                        principalColumn: "ApplicationId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ResponseChanges_AspNetUsers_InitiatingUserId",
+                        column: x => x.InitiatingUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
-                name: "IX_ABBApplications_AuthorId",
-                table: "ABBApplications",
+                name: "IX_AbbResponses_AuthorId",
+                table: "AbbResponses",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ABBApplications_RelatedRequestRequestId",
-                table: "ABBApplications",
+                name: "IX_AbbResponses_RelatedRequestRequestId",
+                table: "AbbResponses",
                 column: "RelatedRequestRequestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ABBProfiles_assocUserId",
-                table: "ABBProfiles",
-                column: "assocUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -370,30 +402,44 @@ namespace backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_AzubiProfiles_assocUserId",
-                table: "AzubiProfiles",
-                column: "assocUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AzubiProfiles_TrainingOccupationAbbr",
-                table: "AzubiProfiles",
-                column: "TrainingOccupationAbbr");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AzubiRequests_AuthorId",
                 table: "AzubiRequests",
                 column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestChanges_CHangedRequestRequestId",
+                table: "RequestChanges",
+                column: "CHangedRequestRequestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestChanges_InitiatingUserId",
+                table: "RequestChanges",
+                column: "InitiatingUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResponseChanges_ChangedResponseApplicationId",
+                table: "ResponseChanges",
+                column: "ChangedResponseApplicationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResponseChanges_InitiatingUserId",
+                table: "ResponseChanges",
+                column: "InitiatingUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserChanges_ChangedUserId",
+                table: "UserChanges",
+                column: "ChangedUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserChanges_InitiatingUserId",
+                table: "UserChanges",
+                column: "InitiatingUserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ABBApplications");
-
-            migrationBuilder.DropTable(
-                name: "ABBProfiles");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -410,16 +456,22 @@ namespace backend.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "AzubiProfiles");
+                name: "RequestChanges");
 
             migrationBuilder.DropTable(
-                name: "AzubiRequests");
+                name: "ResponseChanges");
+
+            migrationBuilder.DropTable(
+                name: "UserChanges");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "TrainingOccupation");
+                name: "AbbResponses");
+
+            migrationBuilder.DropTable(
+                name: "AzubiRequests");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
