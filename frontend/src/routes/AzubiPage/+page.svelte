@@ -17,11 +17,6 @@
     <span class="BannerElement">Richtung</span>
 </div>
 
-<nav id="nav">
-	<a href="/">home</a>
-    <a href="/UserPage">user</a>
-</nav>
-
 <main>
     <RequestFetcher />
 </main>
