@@ -1,8 +1,8 @@
 import type { AzubiRequestDTO } from "$lib/api/Api";
-import type { LayoutServerLoad } from "../$types";
+import type { PageServerLoad } from "./$types";
 import { ApiProvider } from "$lib/api/ApiProvider";
 
-export const load: LayoutServerLoad = async (context) => {
+export const load: PageServerLoad = async (context) => {
     const api_provider = new ApiProvider(context.cookies).api
     let all_requests
 
