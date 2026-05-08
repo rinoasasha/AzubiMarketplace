@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Models.Enums;
@@ -9,24 +11,28 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/[controller]")]
 public class UserController : ControllerBase
 {
+    private readonly UserManager<User> _userManager;
+    private readonly RoleManager<UserRole> _roleManager;
     private readonly DataContext _context;
     private readonly IMapper _mapper;
     
-    public UserController(DataContext context, IMapper mapper)
+    public UserController(DataContext context, IMapper mapper, UserManager<User> userManager, RoleManager<UserRole> roleManager)
     {
+        _userManager = userManager;
+        _roleManager = roleManager;
         _context = context;
         _mapper = mapper;
     }
     
     // get all users
-    [HttpGet]
+    [HttpGet("getall")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDTO>))]
     public async Task<IActionResult> Get()
     {
-        var users = await _context.Users.ToListAsync();
+        var users = await _userManager.Users.ToListAsync();
         return Ok(_mapper.Map<List<UserDTO>>(users));
     }
     
@@ -45,36 +51,108 @@ public class UserController : ControllerBase
     }
     
     // get user by userId
-
-    // add user
-    [HttpPost("{_accountType}")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserDTO))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] UserCreateDTO userdto, [FromRoute]string _accountType)
+    
+    // edit own user profile
+    [HttpPatch("edit/self")]
+    public async Task<IActionResult> EditSelf([FromBody] UserEditDTO edits)
     {
-        AccountType accountType;
-        switch (_accountType)
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        if (user == null)
         {
-            case "Azubi":
-                accountType = AccountType.Azubi;
-                break;
-            case "ABB":
-                accountType = AccountType.ABB;
-                break;
-            default:
-                return BadRequest("Invalid account type");
+            return BadRequest();
         }
-        
-        var user = new User()
+
+        var changes = new List<UserChange>();
+        var sessionId = Guid.NewGuid();
+        foreach (var property in edits.GetType().GetProperties())
         {
-            LocalUsername = userdto.Username,
-            Email = userdto.Email,
-        };
-        
-        await _context.Users.AddAsync(user);
+            Console.WriteLine(property);
+            var valueOld = user.GetType().GetProperty(property.Name).GetValue(user);
+            var valueNew = edits.GetType().GetProperty(property.Name).GetValue(edits);
+            if (valueOld != valueNew && valueNew != null)
+            {
+                var change = new UserChange()
+                {
+                    SessionId =  sessionId,
+                    ChangedUser =  user,
+                    InitiatingUser = user,
+                    PropertyName = property.Name,
+                    OldValue = valueOld.ToString(),
+                    NewValue = valueNew.ToString()
+                };
+                user.GetType().GetProperty(property.Name).SetValue(user, valueNew);
+                changes.Add(change);
+                _context.UserChanges.Add(change);
+            }
+        }
+        await _userManager.UpdateAsync(user);
         await _context.SaveChangesAsync();
-        return Created("", _mapper.Map<UserDTO>(user));
+        return Ok(changes);
     }
     
-    // login
+    //edit user profile as admin
+    [Authorize(Roles = "Admin")]
+    [HttpPatch("edit/{userid}")]
+    public async Task<IActionResult> Edit([FromBody] UserEditDTO edits, [FromRoute] string userid)
+    {
+        var user = await _userManager.FindByIdAsync(userid);
+        var initiatingUser = await _userManager.GetUserAsync(HttpContext.User);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var changes = new List<UserChange>();
+        var sessionId = Guid.NewGuid();
+        foreach (var property in edits.GetType().GetProperties())
+        {
+            Console.WriteLine(property);
+            var valueOld = user.GetType().GetProperty(property.Name).GetValue(user);
+            var valueNew = edits.GetType().GetProperty(property.Name).GetValue(edits);
+            if (valueOld != valueNew && valueNew != null)
+            {
+                var change = new UserChange()
+                {
+                    SessionId =  sessionId,
+                    ChangedUser =  user,
+                    InitiatingUser = initiatingUser,
+                    PropertyName = property.Name,
+                    OldValue = valueOld.ToString(),
+                    NewValue = valueNew.ToString(),
+                };
+                user.GetType().GetProperty(property.Name).SetValue(user, valueNew);
+                changes.Add(change);
+                _context.UserChanges.Add(change);
+            }
+        }
+        await _userManager.UpdateAsync(user);
+        await _context.SaveChangesAsync();
+        return Ok(changes);
+    }
+    
+    // get role azubi
+    [HttpPatch("azubi")]
+    public async Task<IActionResult> MakeAzubi()
+    {
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        if (user == null)
+        {
+            return BadRequest();
+        }
+        await _userManager.AddToRoleAsync(user, "Azubi");
+        return Ok();
+    }
+    
+    // get role abb
+    [HttpPatch("abb")]
+    public async Task<IActionResult> MakeABB()
+    {
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        await _userManager.AddToRoleAsync(user, "ABB");
+        return Ok();
+    }
 }
