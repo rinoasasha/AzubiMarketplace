@@ -23,5 +23,5 @@
 </nav>
 
 {#each data.requests as request}
-    <AzubiBlock {...{request: request, userid: data.user?.id}}/>
+    <AzubiBlock {...{request: request, userid: data.currentUser?.id}}/>
 {/each}

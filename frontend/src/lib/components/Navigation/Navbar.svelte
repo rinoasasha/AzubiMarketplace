@@ -69,6 +69,6 @@
     {#if data.login}
 	<a href={getLoginUrl()}> Login (Bosch SSO)</a>
     {:else}
-    <a href={getLogoutUrl()}> Logout<br>{data.user?.localUsername}</a>
+    <a href={getLogoutUrl()}> Logout<br></a>
     {/if}
 </div>
