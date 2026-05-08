@@ -1,9 +1,7 @@
 <script lang="ts">
-	import RegisterAzubi from "$lib/components/RegisterAzubi.svelte";
 
 </script>
 
-
-<main>
-    <RegisterAzubi />
-</main>
+<div class="post-form-container">
+    You are now Azubi!
+</div>

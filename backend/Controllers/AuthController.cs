@@ -38,6 +38,17 @@ public class AuthController : ControllerBase
 
         return Ok(_mapper.Map<UserDTO>(user));
     }
+
+    [HttpGet("@me/role")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<string>))]
+    public async Task<IActionResult> GetUserRole()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null) return Unauthorized("Cannot find user");
+        var roles = await _userManager.GetRolesAsync(user);
+        return Ok(roles);
+    }
     
     [HttpGet("signin/{providerName}")]
     public IActionResult Login(string providerName, string? returnUrl = null)

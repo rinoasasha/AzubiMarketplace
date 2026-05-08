@@ -251,17 +251,17 @@ button[type="submit"]:disabled {
 
 #teamPicker {
     display: flex;
-    justify-content: space-between;
-    font-size: 3rem;
+    justify-content: center;
+    /* font-size: 3rem; */
     font-weight: bold;
     @apply dark:text-[var(--global-color-1)] text-[var(--global-color-2)];
-    width: 50vw;
+    width: fit-content;
     height: fit-content;
     margin-top: 5rem;
     margin-left: auto;
     margin-right: auto;
     padding: 1rem;
-    border: 5px solid;
+    border: 1px solid;
     @apply dark:border-[var(--global-color-1)] border-[var(--global-color-2)];
     @apply dark:bg-linear-to-tl dark:from-[var(--global-color-2)] dark:to-[var(--global-color-3)] bg-linear-to-bl from-[var(--global-color-3)] to-[var(--global-color-1)];
     border-radius: 15px;

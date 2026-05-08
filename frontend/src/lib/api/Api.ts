@@ -23,7 +23,8 @@ export interface ABBResponseDTO {
   /** @format date-time */
   creationDateTime?: string;
   textContent?: string;
-  relatedRequest?: AzubiRequestDTO;
+  /** @format uuid */
+  relatedRequestRequestId?: string;
 }
 
 export interface AzubiRequestCreateDTO {
@@ -354,6 +355,21 @@ export class Api<
     v1AuthMeList: (params: RequestParams = {}) =>
       this.request<UserDTO, any>({
         path: `/api/v1/Auth/@me`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name V1AuthMeRoleList
+     * @request GET:/api/v1/Auth/@me/role
+     */
+    v1AuthMeRoleList: (params: RequestParams = {}) =>
+      this.request<string[], any>({
+        path: `/api/v1/Auth/@me/role`,
         method: "GET",
         format: "json",
         ...params,
