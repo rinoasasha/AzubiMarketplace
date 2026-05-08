@@ -39,6 +39,44 @@
         }
       }
     },
+    "/api/v1/Auth/@me/role": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/Auth/signin/{providerName}": {
       "get": {
         "tags": [
@@ -474,8 +512,9 @@
           "textContent": {
             "type": "string"
           },
-          "relatedRequest": {
-            "$ref": "#/components/schemas/AzubiRequestDTO"
+          "relatedRequestRequestId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },

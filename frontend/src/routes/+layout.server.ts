@@ -18,9 +18,9 @@ export const load: LayoutServerLoad = async (context) => {
     const api_provider = new ApiProvider(context.cookies)
 
     let user;
+    let roles;
     try {
         user = await api_provider.api.api.v1AuthMeList()
-        console.log({user});
     } catch (e) {
         console.log("user auth request failed --> login", e);
 
@@ -39,7 +39,7 @@ export const load: LayoutServerLoad = async (context) => {
     return {
         login: false,
         currentUser: user.data,
-        currentUserId: user.data.id
+        currentUserId: user.data.id,
     };
 };
 

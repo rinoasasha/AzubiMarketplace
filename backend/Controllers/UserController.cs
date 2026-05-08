@@ -130,7 +130,7 @@ public class UserController : ControllerBase
         return Ok(changes);
     }
     
-    // get role azubi
+    // change to azubi
     [HttpPatch("azubi")]
     public async Task<IActionResult> MakeAzubi()
     {
@@ -139,11 +139,16 @@ public class UserController : ControllerBase
         {
             return BadRequest();
         }
+
+        if (await _userManager.IsInRoleAsync(user, "ABB"))
+        {
+            await _userManager.RemoveFromRoleAsync(user, "ABB");
+        }
         await _userManager.AddToRoleAsync(user, "Azubi");
         return Ok();
     }
     
-    // get role abb
+    // change to abb
     [HttpPatch("abb")]
     public async Task<IActionResult> MakeABB()
     {
@@ -152,6 +157,11 @@ public class UserController : ControllerBase
         {
             return NotFound();
         }
+        if (await _userManager.IsInRoleAsync(user, "Azubi"))
+        {
+            await _userManager.RemoveFromRoleAsync(user, "Azubi");
+        }
+        
         await _userManager.AddToRoleAsync(user, "ABB");
         return Ok();
     }
