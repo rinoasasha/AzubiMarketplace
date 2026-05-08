@@ -17,11 +17,10 @@
     <span class="BannerElement">Richtung</span>
 </div>
 
-<nav id="nav">
-	<a href="/">home</a>
-    <a href="/UserPage">user</a>
-</nav>
+<main>
+    <RequestFetcher />
+</main>
 
-{#each data.requests as request}
+{#each azubis as azubi}
     <AzubiBlock {...{request: request, userid: data.user?.id}}/>
 {/each}
