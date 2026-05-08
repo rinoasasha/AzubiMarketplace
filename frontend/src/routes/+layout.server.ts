@@ -10,7 +10,7 @@ export const load: LayoutServerLoad = async (context) => {
 
         return {
             login: true,
-            user: null as unknown as UserDTO,
+            currentUser: null as unknown as UserDTO,
             currentUserId: null as unknown as string,
         };
     }
@@ -26,7 +26,7 @@ export const load: LayoutServerLoad = async (context) => {
 
         return {
             login: true,
-            user: null as unknown as UserDTO,
+            currentUser: null as unknown as UserDTO,
             currentUserId: null as unknown as string,
         };
     }
