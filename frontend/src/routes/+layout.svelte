@@ -18,8 +18,9 @@
         <button id="In">In</button>
     </div>
     <div id="TopButtons" class="flex justify-center content-center items-center gap-x-2">
+        <a href="/">home</a>
+        <a href="/AzubiPage">azubis</a>
+        <a href="/UserPage">user</a>
         <ThemeSwitch/>
-        <!-- <Login/> -->
     </div>
-    <div></div>
 </div>
