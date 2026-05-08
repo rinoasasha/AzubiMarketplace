@@ -29,10 +29,14 @@ public class ResponseController : ControllerBase
     
     // post new response
     [HttpPost("create")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Post([FromBody]ABBResponseCreateDTO _request)
     {
         var author = await _userManager.GetUserAsync(HttpContext.User);
-        var relatedRequest = await _context.AzubiRequests.FirstOrDefaultAsync(x => x.RequestId == _request.RelatedRequestId);
+        var relatedRequest = await _context.AzubiRequests
+                .Include(x => x.Responses)
+                .Include(x => x.Author)
+                .FirstOrDefaultAsync(x => x.RequestId == _request.RelatedRequestId);
         if (author == null || relatedRequest == null)
         {
             return BadRequest();
@@ -52,6 +56,7 @@ public class ResponseController : ControllerBase
         await _context.AbbResponses.AddAsync(response);
         relatedRequest.Responses.Add(response);
         await _context.SaveChangesAsync();
-        return Ok();
+        
+        return Created("", _mapper.Map<ABBResponseDTO>(response));
     }
 }

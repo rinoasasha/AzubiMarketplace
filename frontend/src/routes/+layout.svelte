@@ -4,11 +4,13 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
     import type { LayoutProps } from './$types';
+	import Navbar from '$lib/components/Navigation/Navbar.svelte';
 
 	let { children, data } = $props();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<Navbar {data}/>
 {@render children()}
 <div id="TopBar">
     <div id="Logo">
@@ -16,8 +18,9 @@
         <button id="In">In</button>
     </div>
     <div id="TopButtons" class="flex justify-center content-center items-center gap-x-2">
+        <a href="/">home</a>
+        <a href="/AzubiPage">azubis</a>
+        <a href="/UserPage">user</a>
         <ThemeSwitch/>
-        <!-- <Login/> -->
     </div>
-    <div>{data.login.valueOf()}</div>
 </div>

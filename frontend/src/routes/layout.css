@@ -123,17 +123,28 @@ body{
     padding-top: 1rem;
     width: 80%;
 }
+
 #nav{
     position: fixed;
-    font-size: 1.5rem;
-    top: 4.5rem;
-    left: 1rem;
-    @apply dark:text-[var(--global-color-1)] text-[var(--global-color-2)];
+    top: 5rem;
+    right: 1rem;
+    @apply dark:text-[var(--global-color-1)] dark:bg-[var(--global-color-2-o)] text-[var(--global-color-3)] bg-[var(--global-color-1-o)];
+    font-weight: bold;
+    font-size: 2rem;
 }
 
-#nav >a:hover{
+#nav :hover{
+    font-style: italic;
+}
+
+#TopBar >div >a:hover{
+    font-style: italic;
+}
+
+#submit:hover{
     color: var(--global-color-3);
     font-weight: bold;
+    cursor: pointer;
 }
 
 #homeMsg{
@@ -144,7 +155,9 @@ body{
     @apply dark:text-[var(--global-color-1)] text-[var(--global-color-2)];
     width: fit-content;
     height: fit-content;
-    margin: auto;
+    margin-top: 15rem;
+    margin-left: auto;
+    margin-right: auto;
     padding: 1rem;
     border: 5px solid;
     @apply dark:border-[var(--global-color-1)] border-[var(--global-color-2)];
@@ -188,7 +201,8 @@ input[type="number"],
 textarea {
     width: calc(100% - 1rem);
     padding: 0.8rem;
-    border: 1px solid #ddd;
+    border: 1px solid;
+    @apply dark:border-[var(--global-color-1)] border-[var(--global-color-2)];
     border-radius: 15px;
     box-sizing: border-box;
     font-size: 16px;
@@ -243,7 +257,9 @@ button[type="submit"]:disabled {
     @apply dark:text-[var(--global-color-1)] text-[var(--global-color-2)];
     width: 50vw;
     height: fit-content;
-    margin: auto;
+    margin-top: 5rem;
+    margin-left: auto;
+    margin-right: auto;
     padding: 1rem;
     border: 5px solid;
     @apply dark:border-[var(--global-color-1)] border-[var(--global-color-2)];

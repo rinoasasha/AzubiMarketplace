@@ -1,10 +1,10 @@
 <script lang="ts">
+	import type { PageProps } from './$types';
+    import type { AzubiRequestDTO } from "$lib/api/Api";
     import RequestFetcher from "$lib/components/RequestFetcher.svelte";
     import AzubiBlock from "$lib/components/AzubiBlock.svelte";
-    let azubis:Azubi[] = [
-        {name:"placeholder", lehrjahr:1, standort:"placeholder", richtung:"placeholder", zeitraum:"placeholder", text:"placeholder"},
-    ]
 
+    let { data }: PageProps = $props();
 </script>
 
 <a id="Anzeige" href="/AnzeigePage">Anzeige erstellen</a>
@@ -22,5 +22,5 @@
 </main>
 
 {#each azubis as azubi}
-    <AzubiBlock {azubi}/>
+    <AzubiBlock {...{request: request, userid: data.user?.id}}/>
 {/each}

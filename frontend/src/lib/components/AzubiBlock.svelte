@@ -1,16 +1,16 @@
 <script lang="ts">
+    import type { AzubiRequestDTO } from "$lib/api/Api";
     type Props ={
-        azubi:Azubi
+        request: AzubiRequestDTO,
+        userid: string | undefined
     }
-    let {
-        azubi
-    }:Props=$props();
+    let { request, userid }:Props=$props();
     let visible = $state(false);
 </script>
 <div id="AzubiBlock">
     <div>
         <span class="AzubiName">
-            {azubi.name}
+            {`${request.author?.firstName} ${request.author?.lastName}`}
             <label class="Azubibox">
                 <input type="checkbox" bind:checked={visible} />
             </label>
@@ -20,7 +20,7 @@
                     Lehrjahr:
                 </span>
                 <span>
-                    {azubi.lehrjahr}
+                    {request.author?.trainingStartYear}
                 </span>
             </span>
             <span class="Input">
@@ -28,29 +28,25 @@
                     Standort:
                 </span>
                 <span>
-                    {azubi.standort}
+                    {request.author?.location}
                 </span>
             </span>
             <span class="Input">
                 <span>
-                    Richtung:
+                    Ausbildungsberuf:
                 </span>
                 <span>
-                    {azubi.richtung}
-                </span>
-            </span>
-            <span class="Input">
-                <span>
-                    Zeitraum:
-                </span>
-                <span>
-                    {azubi.zeitraum}
+                    {request.author?.trainingOccupation}
                 </span>
             </span>
             <span class="AzubiText">
                 {#if visible}
-                <p>{azubi.text}</p>
+                <p>{request.textContent}</p>
                 {/if}
             </span>
+            <a href="/AzubiPage/sendAnswer?toRequest={request.requestId}" type="button">Anfragen</a>
+            {#if request.author?.id === userid}
+            <a href=""></a>
+            {/if}
         </div>
     </div>
