@@ -65,14 +65,10 @@
     }
 
 </script>
-<div>
-    <div>Item</div>
-    <div>Item</div>
-    <div>Item</div>
-    <div>Item</div>
+<div id="nav">
     {#if data.login}
-	<a class="inline-block min-w-12 cursor-pointer p-4 hover:bg-gray-700" href={getLoginUrl()}> Login (Bosch SSO)</a>
+	<a href={getLoginUrl()}> Login (Bosch SSO)</a>
     {:else}
-    <a class="inline-block min-w-12 cursor-pointer p-4 hover:bg-gray-700" href={getLogoutUrl()}> Logout<br>{data.user?.localUsername}</a>
+    <a href={getLogoutUrl()}> Logout<br>{data.user?.localUsername}</a>
     {/if}
 </div>
