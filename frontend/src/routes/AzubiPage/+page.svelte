@@ -20,7 +20,7 @@ const includesCaseInsensitive = (str, searchString) =>
 
         if(searchTextState.value !== ""){
 			filteredResults = filteredResults.filter((data) =>
-				includesCaseInsensitive(data, searchTextState.value)
+				includesCaseInsensitive(data.textContent, searchTextState.value)
 			);
 		}
 
