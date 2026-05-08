@@ -49,8 +49,6 @@ async function fetchRequests() {
 </script>
 
 <div>
-    <h1>Requests</h1>
-
     {#if loading}
         <p>Loading requests...</p>
     {:else if error}
@@ -73,32 +71,3 @@ async function fetchRequests() {
         {loading ? 'Fetching...' : 'Fetch More Requests'}
     </button>
 </div>
-
-<style>
-  div {
-    font-family: sans-serif;
-    padding: 20px;
-  }
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  li {
-    background-color: #f0f0f0;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-  }
-  button {
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-</style>

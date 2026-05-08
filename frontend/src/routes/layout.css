@@ -271,3 +271,12 @@ button[type="submit"]:disabled {
     @apply dark:text-[var(--global-color-3)] text-[var(--global-color-1)];
     font-weight: bold;
 }
+
+#FilterTextLabel{
+    @apply dark:text-[var(--global-color-1)] text-[var(--global-color-3)];
+    padding: 1rem;
+    @apply dark:border-[var(--global-color-1)] border-[var(--global-color-2)];
+    @apply dark:bg-linear-to-tl dark:from-[var(--global-color-2)] dark:to-[var(--global-color-3)] bg-linear-to-bl from-[var(--global-color-3)] to-[var(--global-color-1)];
+    border-radius: 15px;
+    @apply dark:shadow-[5px_5px_3px_rgba(255,255,255,0.5)] shadow-[-5px_5px_3px_rgba(0,0,0,0.25)];
+}
