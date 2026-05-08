@@ -29,10 +29,11 @@ public class RequestController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AzubiRequestDTO>))]
     public async Task<IActionResult> Get()
     {
-        List<AzubiRequest> requests = await _context.AzubiRequests
+        var requests = await _context.AzubiRequests
             .Include(request => request.Author)
             .Include(request => request.Responses)
             .ToListAsync();
+        
         return Ok(_mapper.Map<List<AzubiRequestDTO>>(requests));
     }
     

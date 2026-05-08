@@ -1,13 +1,10 @@
 <script lang="ts">
     import type { AzubiRequestDTO } from "$lib/api/Api";
-	import { redirect } from "@sveltejs/kit";
     type Props ={
-        request: AzubiRequestDTO
+        request: AzubiRequestDTO,
+        userid: string | undefined
     }
-    let {
-        request
-    }:Props=$props();
-    console.log(request)
+    let { request, userid }:Props=$props();
     let visible = $state(false);
 </script>
 <div id="AzubiBlock">
@@ -47,8 +44,9 @@
                 <p>{request.textContent}</p>
                 {/if}
             </span>
-            <a href="/AzubiPage/sendAnswer?toRequest={request.requestId}" type="button"> <!-- Schickt User zum Answer-Form -->
-                Anfragen
-            </a>
+            <a href="/AzubiPage/sendAnswer?toRequest={request.requestId}" type="button">Anfragen</a>
+            {#if request.author?.id === userid}
+            <a href=""></a>
+            {/if}
         </div>
     </div>
