@@ -17,10 +17,9 @@
     <span class="BannerElement">Richtung</span>
 </div>
 
-<nav id="nav">
-	<a href="/">home</a>
-    <a href="/UserPage">user</a>
-</nav>
+<main>
+    <RequestFetcher />
+</main>
 
 {#each data.requests as request}
     <AzubiBlock {...{request: request, userid: data.currentUser?.id}}/>
