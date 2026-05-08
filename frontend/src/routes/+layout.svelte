@@ -4,11 +4,13 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
     import type { LayoutProps } from './$types';
+	import Navbar from '$lib/components/Navigation/Navbar.svelte';
 
 	let { children, data } = $props();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<Navbar {data}/>
 {@render children()}
 <div id="TopBar">
     <div id="Logo">
@@ -19,5 +21,5 @@
         <ThemeSwitch/>
         <!-- <Login/> -->
     </div>
-    <div>{data.login.valueOf()}</div>
+    <div></div>
 </div>

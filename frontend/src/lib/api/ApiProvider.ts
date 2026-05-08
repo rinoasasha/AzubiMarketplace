@@ -9,7 +9,7 @@ export class ApiProvider{
     constructor(cookies?: Cookies){
         if(cookies){
             this.api = new Api({
-                baseUrl: "http://localhost:5017",
+                baseUrl: "http://localhost:5000",
                 baseApiParams: {
                     credentials: 'include',
                     headers: {
@@ -22,7 +22,7 @@ export class ApiProvider{
             });
         } else {
             this.api = new Api({
-                baseUrl: "http://localhost:5017",
+                baseUrl: "http://localhost:5000",
                 baseApiParams: {
                     credentials: 'include'  
                 }
