@@ -1,16 +1,19 @@
 <script lang="ts">
+    import type { AzubiRequestDTO } from "$lib/api/Api";
+	import { redirect } from "@sveltejs/kit";
     type Props ={
-        azubi:Azubi
+        request: AzubiRequestDTO
     }
     let {
-        azubi
+        request
     }:Props=$props();
+    console.log(request)
     let visible = $state(false);
 </script>
 <div id="AzubiBlock">
     <div>
         <span class="AzubiName">
-            {azubi.name}
+            {`${request.author?.firstName} ${request.author?.lastName}`}
             <label class="Azubibox">
                 <input type="checkbox" bind:checked={visible} />
             </label>
@@ -20,7 +23,7 @@
                     Lehrjahr:
                 </span>
                 <span>
-                    {azubi.lehrjahr}
+                    {request.author?.trainingStartYear}
                 </span>
             </span>
             <span class="Input">
@@ -28,29 +31,24 @@
                     Standort:
                 </span>
                 <span>
-                    {azubi.standort}
+                    {request.author?.location}
                 </span>
             </span>
             <span class="Input">
                 <span>
-                    Richtung:
+                    Ausbildungsberuf:
                 </span>
                 <span>
-                    {azubi.richtung}
-                </span>
-            </span>
-            <span class="Input">
-                <span>
-                    Zeitraum:
-                </span>
-                <span>
-                    {azubi.zeitraum}
+                    {request.author?.trainingOccupation}
                 </span>
             </span>
             <span class="AzubiText">
                 {#if visible}
-                <p>{azubi.text}</p>
+                <p>{request.textContent}</p>
                 {/if}
             </span>
+            <a href="/AzubiPage/sendAnswer?toRequest={request.requestId}" type="button"> <!-- Schickt User zum Answer-Form -->
+                Anfragen
+            </a>
         </div>
     </div>

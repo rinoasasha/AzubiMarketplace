@@ -120,7 +120,33 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AzubiRequestDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AzubiRequestDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AzubiRequestDTO"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -215,8 +241,8 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
           }
         }
       }
@@ -431,11 +457,61 @@
           }
         }
       },
+      "ABBResponseDTO": {
+        "type": "object",
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "author": {
+            "$ref": "#/components/schemas/UserDTO"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "textContent": {
+            "type": "string"
+          },
+          "relatedRequest": {
+            "$ref": "#/components/schemas/AzubiRequestDTO"
+          }
+        }
+      },
       "AzubiRequestCreateDTO": {
         "type": "object",
         "properties": {
           "textContent": {
             "type": "string"
+          }
+        }
+      },
+      "AzubiRequestDTO": {
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "author": {
+            "$ref": "#/components/schemas/UserDTO"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "textContent": {
+            "type": "string"
+          },
+          "responses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ABBResponseDTO"
+            }
+          },
+          "isActive": {
+            "type": "boolean"
           }
         }
       },
@@ -480,6 +556,23 @@
           },
           "lastName": {
             "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "trainingOccupation": {
+            "type": "string",
+            "nullable": true
+          },
+          "trainingStartYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         }
       },

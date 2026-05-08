@@ -29,6 +29,7 @@ public class ResponseController : ControllerBase
     
     // post new response
     [HttpPost("create")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Post([FromBody]ABBResponseCreateDTO _request)
     {
         var author = await _userManager.GetUserAsync(HttpContext.User);

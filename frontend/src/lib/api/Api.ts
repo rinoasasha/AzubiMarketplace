@@ -16,8 +16,29 @@ export interface ABBResponseCreateDTO {
   relatedRequestId?: string;
 }
 
+export interface ABBResponseDTO {
+  /** @format uuid */
+  applicationId?: string;
+  author?: UserDTO;
+  /** @format date-time */
+  creationDateTime?: string;
+  textContent?: string;
+  relatedRequest?: AzubiRequestDTO;
+}
+
 export interface AzubiRequestCreateDTO {
   textContent?: string;
+}
+
+export interface AzubiRequestDTO {
+  /** @format uuid */
+  requestId?: string;
+  author?: UserDTO;
+  /** @format date-time */
+  creationDateTime?: string;
+  textContent?: string;
+  responses?: ABBResponseDTO[];
+  isActive?: boolean;
 }
 
 export interface ProblemDetails {
@@ -35,6 +56,11 @@ export interface UserDTO {
   localUsername?: string;
   firstName?: string;
   lastName?: string;
+  location?: string | null;
+  department?: string | null;
+  trainingOccupation?: string | null;
+  /** @format int32 */
+  trainingStartYear?: number | null;
 }
 
 export interface UserEditDTO {
@@ -405,9 +431,10 @@ export class Api<
      * @request GET:/api/v1/Request/all
      */
     v1RequestAllList: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<AzubiRequestDTO[], any>({
         path: `/api/v1/Request/all`,
         method: "GET",
+        format: "json",
         ...params,
       }),
 
